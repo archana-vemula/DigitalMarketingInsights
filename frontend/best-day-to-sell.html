@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Best Day to Sell | Digital Market Insights</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Poppins", sans-serif;
+            background: linear-gradient(135deg, #0F4C0F 0%, #1A5F1A 15%, #2E7D2E 30%, #4CAF50 50%, #66BB6A 70%, #81C784 90%, #A5D6A7 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #fff;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #e5ffe8;
+            text-shadow: 0 0 12px rgba(0, 255, 136, 0.6);
+            font-size: 32px;
+        }
+
+        .best-day-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(16px);
+            border: 2px solid rgba(255, 255, 255, 0.35);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .best-day-emoji {
+            font-size: 60px;
+            margin-bottom: 15px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .best-day-label {
+            font-size: 14px;
+            color: #b3e5b3;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .best-day-date {
+            font-size: 36px;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 5px;
+            text-shadow: 0 2px 10px rgba(0, 255, 136, 0.4);
+        }
+
+        .best-day-price {
+            font-size: 28px;
+            font-weight: 700;
+            color: #00ff88;
+            margin-bottom: 15px;
+        }
+
+        .best-day-reason {
+            font-size: 14px;
+            color: #dfffda;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .comparison-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        .comparison-title {
+            font-weight: 700;
+            font-size: 16px;
+            margin-bottom: 15px;
+            color: #b3e5b3;
+        }
+
+        .comparison-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .comparison-row:last-child {
+            border-bottom: none;
+        }
+
+        .comparison-label {
+            color: #ddd;
+            font-size: 14px;
+        }
+
+        .comparison-value {
+            font-weight: 700;
+            font-size: 16px;
+            color: #00ff88;
+        }
+
+        .timeline-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        .timeline-title {
+            font-weight: 700;
+            font-size: 16px;
+            margin-bottom: 15px;
+            color: #b3e5b3;
+        }
+
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .timeline-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            font-size: 13px;
+        }
+
+        .timeline-day {
+            min-width: 60px;
+            font-weight: 700;
+            color: #00ff88;
+        }
+
+        .timeline-price {
+            flex: 1;
+            color: #ddd;
+        }
+
+        .timeline-marker {
+            margin-right: 10px;
+        }
+
+        .timeline-item.best {
+            background: rgba(0, 255, 136, 0.2);
+            border: 2px solid rgba(0, 255, 136, 0.5);
+        }
+
+        .timeline-item.best .timeline-marker {
+            color: #00ff88;
+            font-size: 18px;
+        }
+
+        .info-box {
+            background: rgba(76, 175, 80, 0.2);
+            border-left: 4px solid #00ff88;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #00c853, #00e676);
+            color: white;
+            box-shadow: 0 8px 25px rgba(0, 200, 83, 0.3);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 12px 35px rgba(0, 200, 83, 0.5);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            border-radius: 15px;
+        }
+
+        .no-data-emoji {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .no-data-text {
+            font-size: 16px;
+            color: #ddd;
+            margin-bottom: 10px;
+        }
+
+        .no-data-hint {
+            font-size: 12px;
+            color: #aaa;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top-color: #00ff88;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌟 Best Day to Sell</h1>
+        
+        <div id="content">
+            <div class="loading">
+                <div class="spinner"></div>
+                <p style="margin-top: 15px;">Analyzing prices...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            loadBestDayAnalysis();
+        });
+
+        function loadBestDayAnalysis() {
+            const content = document.getElementById('content');
+
+            try {
+                // Get cached predictions
+                const cachedPreds = localStorage.getItem('lastPredictions');
+                if (!cachedPreds) {
+                    content.innerHTML = `
+                        <div class="no-data">
+                            <div class="no-data-emoji">📊</div>
+                            <div class="no-data-text">No prediction data available</div>
+                            <div class="no-data-hint">Go to "Profit Predictor" to generate price predictions first</div>
+                        </div>
+                    `;
+                    return;
+                }
+
+                const { predictions } = JSON.parse(cachedPreds);
+                const analysis = calculateBestDay(predictions);
+
+                if (!analysis) {
+                    content.innerHTML = `
+                        <div class="no-data">
+                            <div class="no-data-emoji">⚠️</div>
+                            <div class="no-data-text">Could not analyze prices</div>
+                            <div class="no-data-hint">Please generate new predictions</div>
+                        </div>
+                    `;
+                    return;
+                }
+
+                // Get crop name
+                const cachedPrices = localStorage.getItem('lastPrices');
+                const crop = cachedPrices ? JSON.parse(cachedPrices).crop || 'Crop' : 'Crop';
+
+                // Build timeline HTML
+                let timelineHTML = '';
+                predictions.forEach((p, i) => {
+                    const isBeautifulDay = i === analysis.bestDayIndex;
+                    const marker = isBeautifulDay ? '🎯' : `📅`;
+                    timelineHTML += `
+                        <div class="timeline-item ${isBeautifulDay ? 'best' : ''}">
+                            <span class="timeline-marker">${marker}</span>
+                            <span class="timeline-day">Day ${i + 1}</span>
+                            <span class="timeline-price">${p.date}: ₹${p.price}</span>
+                        </div>
+                    `;
+                });
+
+                // Calculate additional metrics
+                const avgPrice = predictions.reduce((a, b) => a + b.price, 0) / predictions.length;
+                const minPrice = Math.min(...predictions.map(p => p.price));
+                const maxPrice = Math.max(...predictions.map(p => p.price));
+                const priceGain = analysis.bestPrice - minPrice;
+                const priceGainPercent = ((priceGain / minPrice) * 100).toFixed(1);
+
+                content.innerHTML = `
+                    <div class="best-day-card">
+                        <div class="best-day-emoji">🎯</div>
+                        <div class="best-day-label">Best Day to Sell</div>
+                        <div class="best-day-date">Day ${analysis.bestDayIndex + 1}</div>
+                        <div class="best-day-date" style="font-size: 18px; color: #b3e5b3;">${analysis.bestDate}</div>
+                        <div class="best-day-price">₹${analysis.bestPrice}</div>
+                        <div class="best-day-reason">
+                            This is the highest predicted price in the next 7 days for <strong>${crop}</strong>.
+                            ${analysis.isStable ? 'Market conditions are relatively stable.' : 'Market volatility expected; lock in gains.'}
+                        </div>
+                    </div>
+
+                    <div class="info-box">
+                        📌 <strong>Pro Tip:</strong> Prices reach their peak on Day ${analysis.bestDayIndex + 1} (${analysis.bestDate}). 
+                        Selling on this date could maximize your returns by ₹${Math.round(priceGain)} compared to the lowest price.
+                    </div>
+
+                    <div class="comparison-section">
+                        <div class="comparison-title">📊 Price Comparison</div>
+                        <div class="comparison-row">
+                            <span class="comparison-label">Highest Price (Best Day)</span>
+                            <span class="comparison-value">₹${analysis.bestPrice}</span>
+                        </div>
+                        <div class="comparison-row">
+                            <span class="comparison-label">Lowest Price</span>
+                            <span class="comparison-value">₹${minPrice}</span>
+                        </div>
+                        <div class="comparison-row">
+                            <span class="comparison-label">Average Price</span>
+                            <span class="comparison-value">₹${Math.round(avgPrice)}</span>
+                        </div>
+                        <div class="comparison-row">
+                            <span class="comparison-label">Gain vs Lowest</span>
+                            <span class="comparison-value">+₹${Math.round(priceGain)} (${priceGainPercent}%)</span>
+                        </div>
+                        <div class="comparison-row">
+                            <span class="comparison-label">Price Range</span>
+                            <span class="comparison-value">₹${maxPrice - minPrice}</span>
+                        </div>
+                    </div>
+
+                    <div class="timeline-section">
+                        <div class="timeline-title">📈 7-Day Price Forecast</div>
+                        <div class="timeline">
+                            ${timelineHTML}
+                        </div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="action-btn btn-primary" onclick="planSale(${analysis.bestDayIndex + 1})">
+                            📋 Plan Sale for Day ${analysis.bestDayIndex + 1}
+                        </button>
+                        <button class="action-btn btn-secondary" onclick="window.location.href='index.html'">
+                            Close
+                        </button>
+                    </div>
+                `;
+            } catch (error) {
+                console.error('Error loading analysis:', error);
+                content.innerHTML = `
+                    <div class="no-data">
+                        <div class="no-data-emoji">❌</div>
+                        <div class="no-data-text">Error analyzing prices</div>
+                        <div class="no-data-hint">${error.message}</div>
+                    </div>
+                `;
+            }
+        }
+
+        function calculateBestDay(predictions) {
+            if (!predictions || predictions.length === 0) return null;
+
+            // Find the index of the highest price
+            let bestPrice = 0;
+            let bestDayIndex = 0;
+
+            predictions.forEach((p, i) => {
+                if (p.price > bestPrice) {
+                    bestPrice = p.price;
+                    bestDayIndex = i;
+                }
+            });
+
+            // Check if market is stable (low volatility)
+            const prices = predictions.map(p => p.price);
+            const avg = prices.reduce((a, b) => a + b, 0) / prices.length;
+            const volatility = Math.max(...prices) - Math.min(...prices);
+            const volatilityPercent = (volatility / avg) * 100;
+            const isStable = volatilityPercent < 10;
+
+            return {
+                bestPrice: bestPrice,
+                bestDate: predictions[bestDayIndex].date,
+                bestDayIndex: bestDayIndex,
+                isStable: isStable
+            };
+        }
+
+        function planSale(day) {
+            // Open a planning modal or trigger a notification
+            const cachedPreds = localStorage.getItem('lastPredictions');
+            const { predictions } = JSON.parse(cachedPreds);
+            const sellDate = predictions[day - 1];
+
+            alert(`📅 Sale Plan Created!\n\nBest Day to Sell: Day ${day}\nDate: ${sellDate.date}\nExpected Price: ₹${sellDate.price}\n\n✅ Set a reminder to prepare your harvest for optimal selling!`);
+        }
+    </script>
+</body>
+</html>

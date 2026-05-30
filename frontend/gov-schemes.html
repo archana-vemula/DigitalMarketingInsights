@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Government Schemes — Digital Market Insights</title>
+<style>
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(120deg, #e0f7e9 0%, #a8d5ba 100%);
+  color: #2f4f4f;
+  margin: 0;
+  padding: 0;
+  position: relative; /* Required for absolute positioning of back button */
+}
+
+header {
+  background: #2e7d32;
+  color: #fff;
+  font-size: 26px;
+  font-weight: 700;
+  padding: 20px 0;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Back button positioned outside container - LEFT SIDE */
+.back-btn {
+  position: absolute;
+  top: 120px; /* Below header */
+  left: 30px;
+  background: linear-gradient(135deg, #2a7d2e, #1e5f20);
+  color: #fff;
+  padding: 14px 20px;
+  border-radius: 15px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  box-shadow: 0 6px 15px rgba(42, 125, 46, 0.4);
+  z-index: 1000;
+  transition: all 0.3s ease;
+  transform: translateY(0);
+  white-space: nowrap;
+}
+
+.back-btn:hover {
+  background: linear-gradient(135deg, #38a148, #2e7d32);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(56, 161, 72, 0.5);
+}
+
+.back-btn:active {
+  transform: translateY(-2px);
+}
+
+.container {
+  max-width: 700px;
+  margin: 80px auto 40px; /* Extra top margin to account for back button space */
+  padding: 30px 30px 40px;
+  background: #f3f9f3;
+  border-radius: 18px;
+  box-shadow: 0 6px 15px rgba(45, 105, 40, 0.25);
+  position: relative;
+}
+
+#schemeStateSelect {
+  width: 100%;
+  padding: 14px 18px;
+  border-radius: 12px;
+  border: 2px solid #449d44;
+  font-size: 18px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  outline: none;
+  color: #2f4f4f;
+}
+
+#schemeStateSelect:focus {
+  border-color: #2e7d32;
+  box-shadow: 0 0 8px #2e7d32a8;
+}
+
+#schemeSearchBtn {
+  background: linear-gradient(135deg, #4caf50, #388e3c);
+  color: white;
+  font-size: 19px;
+  padding: 16px;
+  border-radius: 15px;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  margin-top: 16px;
+  transition: background 0.4s ease, transform 0.2s ease;
+  box-shadow: 0 6px 12px rgba(56, 142, 60, 0.5);
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+#schemeSearchBtn:hover {
+  background: linear-gradient(135deg, #43a047, #2e7d32);
+  transform: translateY(-4px);
+}
+
+.scheme-card {
+  background: white;
+  margin: 20px 0;
+  padding: 18px 24px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.07);
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  animation: slideUp 0.4s ease forwards;
+  opacity: 0;
+}
+
+.scheme-card:nth-child(1) { animation-delay: 0.1s; }
+.scheme-card:nth-child(2) { animation-delay: 0.2s; }
+.scheme-card:nth-child(3) { animation-delay: 0.3s; }
+.scheme-card:nth-child(4) { animation-delay: 0.4s; }
+.scheme-card:nth-child(5) { animation-delay: 0.5s; }
+.scheme-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.scheme-logo {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  object-fit: contain;
+  filter: invert(33%) sepia(46%) saturate(321%) hue-rotate(91deg) brightness(91%) contrast(89%);
+  background: #f0f0f0;
+  padding: 8px;
+}
+
+.scheme-card strong {
+  flex-grow: 1;
+  font-size: 18px;
+  color: #2e7d32;
+}
+
+.scheme-card a {
+  color: #2e7d32;
+  font-weight: 600;
+  text-decoration: none;
+  border: 2px solid #2e7d32;
+  padding: 8px 14px;
+  border-radius: 12px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  white-space: nowrap;
+}
+
+.scheme-card a:hover {
+  background-color: #2e7d32;
+  color: white;
+}
+
+@keyframes slideUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes rippleEffect {
+  to {
+    transform: translate(-50%, -50%) scale(4);
+    opacity: 0;
+  }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .back-btn {
+    left: 20px;
+    top: 110px;
+    padding: 12px 16px;
+    font-size: 15px;
+  }
+  
+  .container {
+    margin: 70px auto 30px;
+    padding: 20px;
+  }
+}
+</style>
+</head>
+<body>
+<!-- Back button positioned LEFT OUTSIDE container -->
+<button class="back-btn" onclick="goBackToDashboard()">⬅ Back to Dashboard</button>
+
+<header>Government Schemes for Farmers</header>
+<div class="container">
+  <h3 style="margin-top: 0;">Select Your State</h3>
+  <select id="schemeStateSelect">
+    <option value="">Select State</option>
+    <option>Telangana</option>
+    <option>Andhra Pradesh</option>
+    <option>Karnataka</option>
+    <option>Tamil Nadu</option>
+    <option>Maharashtra</option>
+    <option>Punjab</option>
+    <option>Uttar Pradesh</option>
+    <option>Kerala</option>
+    <option>Gujarat</option>
+    <option>Rajasthan</option>
+    <option>Odisha</option>
+    <option>Bihar</option>
+    <option>Madhya Pradesh</option>
+    <option>Haryana</option>
+    <option>West Bengal</option>
+    <option>Assam</option>
+  </select>
+  <button id="schemeSearchBtn">🔍 Search Schemes</button>
+  <div id="schemeResults"></div>
+</div>
+
+<script>
+function goBackToDashboard() {
+  window.location.href = "index.html";
+}
+
+const centralGovSchemes = [
+  { name: "PM Kisan Samman Nidhi", link: "https://pmkisan.gov.in" },
+  { name: "PM Fasal Bima Yojana", link: "https://pmfby.gov.in" },
+  { name: "Kisan Credit Card (KCC)", link: "https://pmkisan.gov.in/KCC" }
+];
+
+const stateWiseSchemes = {
+  "Telangana": [
+    { name: "Rythu Bandhu", link: "https://rythubandhu.telangana.gov.in" },
+    { name: "Rythu Bheema", link: "https://rythubandhu.telangana.gov.in/Home/Lic" }
+  ],
+  "Andhra Pradesh": [
+    { name: "YSR Rythu Bharosa", link: "https://ysrrythubharosa.ap.gov.in" }
+  ],
+  "Karnataka": [
+    { name: "Krishi Bhagya", link: "https://raitamitra.karnataka.gov.in" }
+  ],
+  "Tamil Nadu": [
+    { name: "TN Farmers Security Scheme", link: "https://www.tn.gov.in" }
+  ],
+  "Maharashtra": [
+    { name: "Shivaji Maharaj Shetkari Sanman Yojana", link: "https://mahacrop.maharashtra.gov.in" }
+  ],
+  "Punjab": [
+    { name: "Punjab Debt Waiver Scheme", link: "https://agripb.gov.in" }
+  ],
+  "Kerala": [
+    { name: "Karshaka Pension", link: "https://keralaagriculture.gov.in" }
+  ],
+  "Gujarat": [
+    { name: "IKhedut Scheme", link: "https://ikhedut.gujarat.gov.in" }
+  ],
+  "Odisha": [
+    { name: "KALIA Yojana", link: "https://kalia.odisha.gov.in" }
+  ]
+};
+
+document.getElementById("schemeSearchBtn").addEventListener("click", () => {
+  const state = document.getElementById("schemeStateSelect").value;
+  const display = document.getElementById("schemeResults");
+
+  const stateSchemes = stateWiseSchemes[state] || [];
+  const combined = [...centralGovSchemes, ...stateSchemes];
+
+  if (combined.length === 0) {
+    display.innerHTML = "<p style='text-align:center; color:#666; font-size:18px;'>No State Selected</p>";
+    return;
+  }
+
+  display.innerHTML = combined.map((scheme, i) => `
+    <div class="scheme-card">
+      <div class="scheme-logo" style="background: linear-gradient(135deg, #e8f5e8, #d4edda);">
+        🏛️
+      </div>
+      <strong>${scheme.name}</strong>
+      <a href="${scheme.link}" target="_blank" rel="noopener noreferrer">Apply Now →</a>
+    </div>
+  `).join("");
+});
+
+// Ripple effect on search button
+document.getElementById("schemeSearchBtn").addEventListener("click", function (e) {
+  const ripple = document.createElement("span");
+  ripple.style.cssText = `
+    position: absolute; width: 80px; height: 80px; 
+    background: rgba(255,255,255,0.6); border-radius: 50%; 
+    pointer-events: none; left: ${e.offsetX}px; top: ${e.offsetY}px;
+    transform: translate(-50%, -50%) scale(0); 
+    animation: rippleEffect 0.7s linear;
+  `;
+  this.appendChild(ripple);
+  setTimeout(() => ripple.remove(), 700);
+});
+</script>
+</body>
+</html>

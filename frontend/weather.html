@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Weather App with Forecast</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(135deg, #11998e 0%, #38ef7d 50%, #4facfe 100%);
+      background-attachment: fixed;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+      overflow-x: hidden;
+    }
+
+    .weather-app {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      padding: 2.5em;
+      border-radius: 25px;
+      width: 100%;
+      max-width: 380px;
+      box-shadow: 
+        0 20px 40px rgba(0,0,0,0.1),
+        0 0 0 1px rgba(255,255,255,0.2),
+        inset 0 1px 0 rgba(255,255,255,0.3);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      animation: slideUp 0.8s ease-out;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .weather-app::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+      background: linear-gradient(90deg, #11998e, #38ef7d, #4facfe);
+      border-radius: 25px 25px 0 0;
+    }
+
+    h1 {
+      font-size: 2em;
+      font-weight: 700;
+      background: linear-gradient(135deg, #11998e, #38ef7d);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 1.5em;
+      letter-spacing: -0.5px;
+    }
+
+    .search-container {
+      position: relative;
+      margin-bottom: 2em;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 1em 1.2em 1em 3.5em;
+      font-size: 1.05em;
+      border: 2px solid rgba(17, 153, 142, 0.3);
+      border-radius: 15px;
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+      outline: none;
+    }
+
+    input[type="text"]:focus {
+      border-color: #11998e;
+      box-shadow: 0 0 0 3px rgba(17, 153, 142, 0.1);
+      transform: translateY(-2px);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 1.2em;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.2em;
+      color: #11998e;
+    }
+
+    button {
+      padding: 1em 2em;
+      font-size: 1em;
+      font-weight: 600;
+      border-radius: 15px;
+      border: none;
+      background: linear-gradient(135deg, #11998e, #38ef7d);
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 20px rgba(17, 153, 142, 0.3);
+      margin-top: 1em;
+      letter-spacing: 0.5px;
+    }
+
+    button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 25px rgba(17, 153, 142, 0.4);
+    }
+
+    button:active {
+      transform: translateY(-1px);
+    }
+
+    .back-btn {
+      margin-top: 2em;
+      padding: 1em;
+      width: 100%;
+      border-radius: 15px;
+      background: linear-gradient(135deg, #2c7a7b, #1b5152);
+      color: white;
+      font-size: 1em;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 20px rgba(44, 122, 123, 0.3);
+    }
+
+    .back-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 25px rgba(44, 122, 123, 0.4);
+    }
+
+    .result {
+      opacity: 0;
+      animation: fadeIn 0.6s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+      }
+    }
+
+    .current-weather {
+      background: linear-gradient(135deg, rgba(17, 153, 142, 0.1), rgba(56, 239, 125, 0.1));
+      border-radius: 20px;
+      padding: 2em 1.5em;
+      margin-bottom: 2em;
+      border: 1px solid rgba(255,255,255,0.2);
+      backdrop-filter: blur(10px);
+    }
+
+    .location-header {
+      font-size: 1.6em;
+      font-weight: 700;
+      color: #333;
+      margin-bottom: 0.5em;
+    }
+
+    .condition-icon {
+      height: 80px;
+      width: 80px;
+      margin: 0.5em 0;
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+    }
+
+    .temp-display {
+      font-size: 3.5em;
+      font-weight: 300;
+      color: #333;
+      margin: 0.2em 0;
+      letter-spacing: -2px;
+    }
+
+    .weather-details {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1em;
+      margin-top: 1em;
+      font-size: 0.95em;
+    }
+
+    .detail-item {
+      background: rgba(255,255,255,0.5);
+      padding: 0.8em;
+      border-radius: 12px;
+      backdrop-filter: blur(5px);
+    }
+
+    .detail-label {
+      color: #666;
+      font-size: 0.85em;
+      font-weight: 500;
+    }
+
+    .detail-value {
+      font-size: 1.1em;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .forecast {
+      text-align: left;
+    }
+
+    .forecast h3 {
+      font-size: 1.3em;
+      color: #333;
+      margin-bottom: 1.5em;
+      font-weight: 600;
+    }
+
+    .forecast-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1em;
+    }
+
+    .forecast-day {
+      background: linear-gradient(135deg, rgba(255,255,255,0.7), rgba(255,255,255,0.5));
+      padding: 1.5em;
+      border-radius: 15px;
+      border: 1px solid rgba(255,255,255,0.3);
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .forecast-day:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+
+    .forecast-date {
+      font-weight: 700;
+      color: #11998e;
+      font-size: 1.1em;
+      margin-bottom: 0.5em;
+    }
+
+    .forecast-condition {
+      color: #666;
+      margin-bottom: 0.8em;
+      font-size: 0.95em;
+    }
+
+    .forecast-temps {
+      display: flex;
+      justify-content: space-between;
+      font-size: 1.1em;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .loading {
+      font-size: 1.1em;
+      color: #11998e;
+      font-weight: 500;
+    }
+
+    .error {
+      color: #e74c3c;
+      font-weight: 500;
+      padding: 1.5em;
+      background: rgba(231, 76, 60, 0.1);
+      border-radius: 15px;
+      border-left: 4px solid #e74c3c;
+    }
+
+    @media (max-width: 480px) {
+      .weather-app {
+        padding: 2em 1.5em;
+        margin: 10px;
+      }
+      
+      .temp-display {
+        font-size: 2.8em;
+      }
+    }
+
+    /* Animated background particles */
+    .particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: rgba(255,255,255,0.6);
+      border-radius: 50%;
+      animation: float 6s infinite linear;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      90% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-100px) rotate(360deg);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="particles" id="particles"></div>
+
+  <div class="weather-app">
+    <h1>🌤️ Weather</h1>
+
+    <form id="locationForm">
+      <div class="search-container">
+        <span class="search-icon">📍</span>
+        <input type="text" id="locationInput" placeholder="Enter city name..." required />
+      </div>
+      <button type="submit">Get Weather</button>
+    </form>
+
+    <div class="result" id="weatherResult"></div>
+
+    <button class="back-btn" onclick="goBack()">← Back to Dashboard</button>
+  </div>
+
+  <script>
+    const apiKey = '94c55a7086df4d0e9a6160719252309';
+
+    // Create floating particles
+    function createParticles() {
+      const particlesContainer = document.getElementById('particles');
+      for (let i = 0; i < 20; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.animationDelay = Math.random() * 6 + 's';
+        particle.style.animationDuration = (Math.random() * 3 + 4) + 's';
+        particlesContainer.appendChild(particle);
+      }
+    }
+
+    document.getElementById('locationForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const location = document.getElementById('locationInput').value.trim();
+      if (location) {
+        getWeather(location);
+      }
+    });
+
+    function getWeather(location) {
+      const url = `http://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${encodeURIComponent(location)}&days=3&aqi=yes&alerts=no`;
+
+      const resultDiv = document.getElementById('weatherResult');
+      resultDiv.innerHTML = '<div class="loading">🌤️ Fetching weather data...</div>';
+
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          if (data.error) {
+            resultDiv.innerHTML = '<div class="error">❌ Location not found. Please try another!</div>';
+            return;
+          }
+
+          const current = data.current;
+          const locationData = data.location;
+          const forecastDays = data.forecast.forecastday;
+
+          let weatherHTML = `
+            <div class="current-weather">
+              <div class="location-header">${locationData.name}, ${locationData.country}</div>
+              <img class="condition-icon" src="https:${current.condition.icon}" alt="${current.condition.text}" />
+              <div class="temp-display">${current.temp_c}°<span style="font-size:0.4em;">C</span></div>
+              <div class="weather-details">
+                <div class="detail-item">
+                  <div class="detail-label">Humidity</div>
+                  <div class="detail-value">${current.humidity}%</div>
+                </div>
+                <div class="detail-item">
+                  <div class="detail-label">Wind</div>
+                  <div class="detail-value">${current.wind_kph}km/h</div>
+                </div>
+              </div>
+            </div>
+            <div class="forecast">
+              <h3>📅 3-Day Forecast</h3>
+              <div class="forecast-container">
+          `;
+
+          forecastDays.forEach((day, index) => {
+            weatherHTML += `
+              <div class="forecast-day">
+                <div class="forecast-date">${new Date(day.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}</div>
+                <div class="forecast-condition">${day.day.condition.text}</div>
+                <div class="forecast-temps">
+                  <span>🌡️ ${day.day.maxtemp_c}°</span>
+                  <span>❄️ ${day.day.mintemp_c}°</span>
+                </div>
+              </div>
+            `;
+          });
+
+          weatherHTML += `
+              </div>
+            </div>
+          `;
+          
+          resultDiv.innerHTML = weatherHTML;
+        })
+        .catch(() => {
+          resultDiv.innerHTML = '<div class="error">🌐 Unable to fetch weather data. Please try again!</div>';
+        });
+    }
+
+    function goBack() {
+      window.location.href = "index.html";
+    }
+
+    // Initialize particles on load
+    window.addEventListener('load', createParticles);
+  </script>
+</body>
+</html>

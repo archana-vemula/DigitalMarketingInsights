@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profit Predictor | Digital Market Insights</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Poppins", sans-serif;
+            /* FIXED Thick Green Background - NO ANIMATION */
+            background: linear-gradient(135deg, #0F4C0F 0%, #1A5F1A 15%, #2E7D2E 30%, #4CAF50 50%, #66BB6A 70%, #81C784 90%, #A5D6A7 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            color: #fff;
+            animation: fadeScreen 1s ease-in-out;
+            position: relative;
+        }
+
+        @keyframes fadeScreen {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* NO BG SPARKLE - COMPLETELY STATIC */
+
+        /* STATIC BOX - NO ANIMATION */
+        .loan-container {
+            width: 420px;
+            padding: 32px;
+            background: rgba(255,255,255,0.18);
+            border-radius: 22px;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            box-shadow: 
+                0 20px 40px rgba(0,0,0,0.5),
+                inset 0 1px 0 rgba(255,255,255,0.4);
+            text-align: center;
+            border: 2px solid rgba(255,255,255,0.35);
+            position: relative;
+            z-index: 1;
+        }
+
+        /* STATIC TITLE - ONLY SUBTLE GLOW */
+        h2 {
+            color: #e5ffe8;
+            margin-bottom: 22px;
+            font-size: 28px;
+            font-weight: 800;
+            text-shadow: 0 0 12px rgba(0,255,136,0.6);
+            animation: glowPulse 2s infinite alternate ease-in-out;
+            position: relative;
+        }
+
+        @keyframes glowPulse {
+            from { text-shadow: 0 0 12px rgba(0,255,136,0.6), 0 0 24px rgba(0,255,136,0.3); }
+            to { text-shadow: 0 0 24px rgba(0,255,136,0.9), 0 0 36px rgba(0,255,136,0.5); }
+        }
+
+        label {
+            display: block;
+            text-align: left;
+            margin: 18px 0 8px 0;
+            font-weight: 600;
+            font-size: 14px;
+            color: #dfffda;
+        }
+
+        .loan-container input {
+            width: 100%;
+            padding: 14px;
+            margin: 6px 0 18px;
+            border: none;
+            border-radius: 14px;
+            font-size: 16px;
+            background: rgba(255,255,255,0.92);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        .loan-container input:focus {
+            box-shadow: 0 12px 30px rgba(0,255,136,0.4), 
+                        0 0 30px rgba(0,255,136,0.3);
+            background: rgba(255,255,255,0.98);
+        }
+
+        .loan-container input:hover {
+            box-shadow: 0 6px 20px rgba(0,255,136,0.2);
+        }
+
+        .loan-container button {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 700;
+            background: linear-gradient(45deg, #00c853, #00e676);
+            color: #fff;
+            font-size: 18px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,200,83,0.4);
+        }
+
+        .loan-container button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.7s;
+        }
+
+        .loan-container button:hover::before {
+            left: 100%;
+        }
+
+        .loan-container button:hover {
+            background: linear-gradient(45deg, #00e676, #69f0ae);
+            box-shadow: 0 20px 40px rgba(0,255,136,0.6), 
+                        0 0 40px rgba(0,255,136,0.4);
+        }
+
+        .loan-container button:active {
+            transform: scale(0.98);
+        }
+
+        .result-box {
+            background: rgba(0,255,160,0.28);
+            backdrop-filter: blur(12px);
+            border-left: 6px solid #00ff88;
+            margin-top: 25px;
+            padding: 22px;
+            border-radius: 16px;
+            color: #eaffeb;
+            display: none;
+            animation: slideResult 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 15.5px;
+            box-shadow: 0 15px 40px rgba(0,255,136,0.35);
+            border-right: 1px solid rgba(255,255,255,0.3);
+        }
+
+        @keyframes slideResult {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: linear-gradient(45deg, rgba(255,255,255,0.3), rgba(255,255,255,0.5));
+            border: 2px solid rgba(255,255,255,0.4);
+            padding: 12px 20px;
+            border-radius: 16px;
+            color: #fff;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(12px);
+            z-index: 10;
+        }
+
+        .back-btn:hover {
+            background: linear-gradient(45deg, rgba(255,255,255,0.7), rgba(255,255,255,0.9));
+            box-shadow: 0 15px 40px rgba(0,255,136,0.5);
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .loan-container { width: 95%; padding: 25px; }
+        }
+    </style>
+</head>
+
+<body>
+    <button class="back-btn" onclick="window.location.href='index.html'">⬅ Back to Dashboard</button>
+
+    <div class="loan-container">
+        <h2>Profit Predictor</h2>
+
+        <label>Production Cost (₹)</label>
+        <input type="number" id="costPrice" placeholder="Total cost">
+
+        <label>Selling Price (₹)</label>
+        <input type="number" id="sellPrice" placeholder="Price per unit">
+
+        <label>Quantity (Kg/Units)</label>
+        <input type="number" id="quantity" placeholder="Enter quantity">
+
+        <button onclick="calculateProfit()">Calculate Profit</button>
+
+        <div id="profitResult" class="result-box"></div>
+    </div>
+
+    <script>
+        function calculateProfit() {
+            const cost = document.getElementById("costPrice").value;
+            const sell = document.getElementById("sellPrice").value;
+            const qty = document.getElementById("quantity").value;
+
+            if (!cost || !sell || !qty) {
+                alert("⚠ Please enter all fields!");
+                return;
+            }
+
+            const totalCost = cost * qty;
+            const totalRevenue = sell * qty;
+            const profit = totalRevenue - totalCost;
+            const profitPercent = (profit / totalCost) * 100;
+            const breakeven = totalCost / qty;
+
+            const result = document.getElementById("profitResult");
+            result.style.display = "block";
+            result.innerHTML = `
+                <h3>📊 Profit Summary</h3>
+                <p><strong>Total Cost:</strong> ₹${totalCost.toFixed(2)}</p>
+                <p><strong>Total Revenue:</strong> ₹${totalRevenue.toFixed(2)}</p>
+                <p><strong>Net Profit:</strong> ₹${profit.toFixed(2)}</p>
+                <p><strong>Profit %:</strong> ${profitPercent.toFixed(2)}%</p>
+                <p><strong>Break-even Price:</strong> ₹${breakeven.toFixed(2)}</p>
+            `;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Seasonal Calendar — Digital Market Insights</title>
+
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #f4f9f4;
+    margin: 0;
+    padding: 0;
+  }
+  header {
+    background: #2a7d2e;
+    color: white;
+    padding: 12px;
+    text-align: center;
+    font-size: 22px;
+    font-weight: bold;
+  }
+  .container {
+    padding: 20px;
+  }
+  h2 {
+    color: #145a23;
+    border-left: 5px solid #2a7d2e;
+    padding-left: 10px;
+  }
+  ul {
+    background: #ffffff;
+    padding: 12px;
+    border-radius: 8px;
+    list-style: none;
+    box-shadow: 0px 3px 6px rgba(0,0,0,0.1);
+  }
+  ul li {
+    padding: 6px 0;
+  }
+  footer {
+    text-align: center;
+    padding: 12px;
+    background: #2a7d2e;
+    color: white;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+  }
+  .back-btn {
+  background: #2a7d2e;
+  color: #fff;
+  padding: 10px 18px;
+  text-decoration: none;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  transition: transform 0.2s ease, background 0.3s ease;
+}
+
+/* Hover animation */
+.back-btn:hover {
+  background: #38a148;
+  transform: translateY(-3px);
+}
+
+/* Click animation */
+.back-btn:active {
+  transform: scale(0.95);
+}
+
+</style>
+</head>
+<body>
+
+<header>Seasonal Calendar Dashboard</header>
+
+<div class="container">
+  <button class="back-btn" onclick="goBackToDashboard()">⬅ Back to Dashboard</button>
+
+
+  <!-- Crop Planning -->
+  <h2>🌱 Crop Planning & Calendar View</h2>
+  <ul id="calendar-list"></ul>
+
+  <!-- Weather Insights -->
+  <h2>⛅ Weather & Climate Insights</h2>
+  <ul id="weather-list"></ul>
+
+  <!-- Pests & Disease -->
+  <h2>🐛 Pest & Disease Management</h2>
+  <ul id="pest-list"></ul>
+</div>
+
+<footer>
+  © Digital Market Insights — Farmers Support
+</footer>
+
+<script>
+// ===== Seasonal Calendar Data =====
+const seasonalData = {
+  "Wheat": ["Nov", "Dec", "Jan", "Feb", "Mar"],
+  "Rice": ["Jun", "Jul", "Aug", "Sep", "Oct"],
+  "Cotton": ["Oct", "Nov", "Dec", "Jan"],
+  "Tomato": ["Sep", "Oct", "Nov", "Dec"],
+  "Potato": ["Nov", "Dec", "Jan", "Feb", "Mar"],
+  "Turmeric": ["Jun", "Jul", "Aug", "Sep"],
+};
+
+// ===== Weather Insights =====
+const weatherData = [
+  "📌 Rainfall peak: June - September (Monsoon)",
+  "🌡️ Summer heat alert: April - June",
+  "⚠️ Cyclone risk: Oct - Dec (Coastal regions)",
+  "☔ Rabi crop irrigation needed: Jan - Feb"
+];
+
+// ===== Pest & Disease Alerts =====
+const pestData = [
+  "🪳 Rice Stem Borer: Aug - Oct • Apply recommended sprays",
+  "🦗 Fall Armyworm in Maize: July - Sep",
+  "🍅 Tomato Leaf Curl Virus risk: Nov - Feb",
+  "🪱 Whiteflies in Cotton: Oct - Dec"
+];
+
+// ===== Render Crop Calendar =====
+function renderSeasonalCalendar() {
+  const list = document.getElementById("calendar-list");
+  for (const crop in seasonalData) {
+    const li = document.createElement("li");
+    li.innerHTML = `<strong>${crop}:</strong> ${seasonalData[crop].join(", ")}`;
+    list.appendChild(li);
+  }
+}
+
+// ===== Render Weather =====
+function renderWeather() {
+  const list = document.getElementById("weather-list");
+  weatherData.forEach(item => {
+    const li = document.createElement("li");
+    li.textContent = item;
+    list.appendChild(li);
+  });
+}
+
+// ===== Render Pests =====
+function renderPests() {
+  const list = document.getElementById("pest-list");
+  pestData.forEach(item => {
+    const li = document.createElement("li");
+    li.textContent = item;
+    list.appendChild(li);
+  });
+}
+
+window.addEventListener("load", () => {
+  renderSeasonalCalendar();
+  renderWeather();
+  renderPests();
+});
+// ===== Back Button Navigation =====
+function goBackToDashboard() {
+  window.location.href = "index.html"; // update this filename if needed
+}
+</script>
+
+</body>
+</html>

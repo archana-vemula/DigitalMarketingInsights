@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Risk Alerts | Digital Market Insights</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Poppins", sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #fff;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #e5ffe8;
+            text-shadow: 0 0 12px rgba(255, 107, 107, 0.6);
+        }
+
+        .alert-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            border-left: 5px solid;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .alert-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .alert-high {
+            border-left-color: #ff6b6b;
+            background: rgba(255, 107, 107, 0.1);
+        }
+
+        .alert-medium {
+            border-left-color: #ffa500;
+            background: rgba(255, 165, 0, 0.1);
+        }
+
+        .alert-low {
+            border-left-color: #ffeb3b;
+            background: rgba(255, 235, 59, 0.1);
+        }
+
+        .alert-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 10px;
+        }
+
+        .alert-title {
+            font-weight: 700;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .alert-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-high {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        .badge-medium {
+            background: #ffa500;
+            color: white;
+        }
+
+        .badge-low {
+            background: #ffeb3b;
+            color: #000;
+        }
+
+        .alert-message {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #ddd;
+            margin-bottom: 10px;
+        }
+
+        .alert-details {
+            font-size: 12px;
+            color: #aaa;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 8px 12px;
+            border-radius: 6px;
+        }
+
+        .no-alerts {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(76, 175, 80, 0.15);
+            border-radius: 12px;
+            border-left: 5px solid #4caf50;
+        }
+
+        .no-alerts-emoji {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .no-alerts-text {
+            font-size: 16px;
+            color: #81c784;
+        }
+
+        .refresh-btn {
+            display: block;
+            margin: 20px auto;
+            padding: 12px 24px;
+            background: linear-gradient(45deg, #00c853, #00e676);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .refresh-btn:hover {
+            box-shadow: 0 8px 25px rgba(0, 200, 83, 0.4);
+        }
+
+        .close-btn {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top-color: #00ff88;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⚠️ Risk Alerts</h1>
+        <button class="refresh-btn" onclick="loadRiskAlerts()">🔄 Refresh Alerts</button>
+        <div id="alerts-container">
+            <div class="loading">
+                <div class="spinner"></div>
+                <p style="margin-top: 15px;">Loading alerts...</p>
+            </div>
+        </div>
+        <button class="close-btn" onclick="window.location.href='index.html'">Close</button>
+    </div>
+
+    <script>
+        // Load risk alerts when page opens
+        window.addEventListener('DOMContentLoaded', () => {
+            loadRiskAlerts();
+        });
+
+        async function loadRiskAlerts() {
+            const container = document.getElementById('alerts-container');
+            container.innerHTML = '<div class="loading"><div class="spinner"></div><p style="margin-top: 15px;">Loading alerts...</p></div>';
+
+            try {
+                // Get cached predictions
+                const cachedPreds = localStorage.getItem('lastPredictions');
+                if (!cachedPreds) {
+                    container.innerHTML = `
+                        <div class="no-alerts">
+                            <div class="no-alerts-emoji">📊</div>
+                            <div class="no-alerts-text">No prediction data available. Go to "Profit Predictor" to generate price predictions.</div>
+                        </div>
+                    `;
+                    return;
+                }
+
+                const { predictions } = JSON.parse(cachedPreds);
+                const alerts = generateAlerts(predictions);
+
+                if (alerts.length === 0) {
+                    container.innerHTML = `
+                        <div class="no-alerts">
+                            <div class="no-alerts-emoji">✅</div>
+                            <div class="no-alerts-text">All clear! No price drop alerts detected.</div>
+                        </div>
+                    `;
+                } else {
+                    let html = '';
+                    alerts.forEach(alert => {
+                        html += `
+                            <div class="alert-card alert-${alert.severity}">
+                                <div class="alert-header">
+                                    <div>
+                                        <div class="alert-title">${alert.emoji} ${alert.crop}</div>
+                                        <div class="alert-message">${alert.message}</div>
+                                    </div>
+                                    <div class="alert-badge badge-${alert.severity}">${alert.severity.toUpperCase()}</div>
+                                </div>
+                                <div class="alert-details">
+                                    📉 Drop: ₹${alert.drop} | Timeline: ${alert.timeline} days | Action: ${alert.action}
+                                </div>
+                            </div>
+                        `;
+                    });
+                    container.innerHTML = html;
+                }
+            } catch (error) {
+                console.error('Error loading alerts:', error);
+                container.innerHTML = `<div class="alert-card alert-high"><div class="alert-message">⚠️ Error loading alerts: ${error.message}</div></div>`;
+            }
+        }
+
+        function generateAlerts(predictions) {
+            const alerts = [];
+
+            if (!predictions || predictions.length < 2) return alerts;
+
+            // Calculate price changes
+            const prices = predictions.map(p => p.price);
+            const firstPrice = prices[0];
+            const lastPrice = prices[prices.length - 1];
+            const change = lastPrice - firstPrice;
+            const percentChange = (change / firstPrice) * 100;
+            const minPrice = Math.min(...prices);
+            const maxPrice = Math.max(...prices);
+            const minIndex = prices.indexOf(minPrice);
+            const maxIndex = prices.indexOf(maxPrice);
+
+            // Get crop name from cached prices
+            const cachedPrices = localStorage.getItem('lastPrices');
+            const crop = cachedPrices ? JSON.parse(cachedPrices).crop || 'Crop' : 'Crop';
+
+            // Alert 1: Sharp decline
+            if (percentChange < -15) {
+                alerts.push({
+                    emoji: '📉',
+                    crop: crop,
+                    message: `⚠️ ${crop} prices may drop sharply by ~${Math.abs(Math.round(percentChange))}% in next 7 days due to market oversupply`,
+                    severity: percentChange < -25 ? 'high' : 'medium',
+                    drop: Math.abs(Math.round(change)),
+                    timeline: 7,
+                    action: 'Consider selling immediately at current rates'
+                });
+            }
+
+            // Alert 2: Mid-week dip
+            if (minIndex > 0 && minIndex < predictions.length - 1) {
+                const daysUntilDip = minIndex + 1;
+                const dropFromStart = firstPrice - minPrice;
+                const dropPercent = (dropFromStart / firstPrice) * 100;
+
+                if (dropPercent > 8) {
+                    alerts.push({
+                        emoji: '📊',
+                        crop: crop,
+                        message: `⚠️ Price dip expected on Day ${daysUntilDip}: Prices may drop to ₹${minPrice}`,
+                        severity: dropPercent > 15 ? 'high' : 'medium',
+                        drop: Math.round(dropFromStart),
+                        timeline: daysUntilDip,
+                        action: 'Avoid selling on this day if possible'
+                    });
+                }
+            }
+
+            // Alert 3: Volatility warning
+            const avgPrice = prices.reduce((a, b) => a + b, 0) / prices.length;
+            const volatility = Math.max(...prices) - Math.min(...prices);
+            const volatilityPercent = (volatility / avgPrice) * 100;
+
+            if (volatilityPercent > 20) {
+                alerts.push({
+                    emoji: '🌊',
+                    crop: crop,
+                    message: `⚠️ High market volatility detected: Prices fluctuating between ₹${minPrice} - ₹${maxPrice}`,
+                    severity: 'medium',
+                    drop: volatility,
+                    timeline: 7,
+                    action: 'Monitor daily updates before selling'
+                });
+            }
+
+            // Alert 4: Slow recovery
+            if (percentChange < 0 && percentChange > -15 && lastPrice > minPrice) {
+                const recoveryDays = predictions.length - minIndex;
+                alerts.push({
+                    emoji: '📈',
+                    crop: crop,
+                    message: `ℹ️ Slow recovery expected: Prices gradually improving from Day ${minIndex + 1}`,
+                    severity: 'low',
+                    drop: 0,
+                    timeline: recoveryDays,
+                    action: 'Wait for recovery or negotiate better rates'
+                });
+            }
+
+            return alerts;
+        }
+    </script>
+</body>
+</html>

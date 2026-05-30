@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Test Login/Signup Buttons</title>
+  <style>
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.4);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    .modal-content {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      width: 300px;
+    }
+    .btn {
+      padding: 10px 20px;
+      margin: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Testing Login/Signup Buttons</h1>
+  <button class="btn login-btn" onclick="openLogin()">Login</button>
+  <button class="btn signup-btn" onclick="openSignup()">Signup</button>
+
+  <div id="login-modal" class="modal">
+    <div class="modal-content">
+      <h3>Login Modal</h3>
+      <p>This is the login modal</p>
+      <button onclick="closeLogin()">Close</button>
+    </div>
+  </div>
+
+  <div id="signup-modal" class="modal">
+    <div class="modal-content">
+      <h3>Signup Modal</h3>
+      <p>This is the signup modal</p>
+      <button onclick="closeSignup()">Close</button>
+    </div>
+  </div>
+
+  <script>
+    function openLogin() {
+      console.log('Opening login modal');
+      document.getElementById('login-modal').style.display = 'flex';
+    }
+    function closeLogin() {
+      console.log('Closing login modal');
+      document.getElementById('login-modal').style.display = 'none';
+    }
+    function openSignup() {
+      console.log('Opening signup modal');
+      document.getElementById('signup-modal').style.display = 'flex';
+    }
+    function closeSignup() {
+      console.log('Closing signup modal');
+      document.getElementById('signup-modal').style.display = 'none';
+    }
+  </script>
+</body>
+</html>

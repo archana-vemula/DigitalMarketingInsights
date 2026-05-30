@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Loan Calculator — Digital Market Insights</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+    
+/* Full Page Background */
+.loan-page {
+  min-height: 100vh;
+  padding: 40px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+  /* Thick Vibrant Green Gradient */
+  background: linear-gradient(135deg, 
+    #0F4C0F 0%, 
+    #1A5F1A 15%, 
+    #2E7D2E 30%, 
+    #4CAF50 50%, 
+    #66BB6A 70%, 
+    #81C784 90%, 
+    #A5D6A7 100%);
+  background-size: 400% 400%;
+  animation: bgThickGreen 15s infinite ease-in-out;
+}
+
+@keyframes bgThickGreen {
+  0%, 100% { background-position: 0% 50%; }
+  33% { background-position: 100% 50%; }
+  66% { background-position: 50% 100%; }
+}
+
+/* Glassy Loan Card - Lighter & Floating */
+.loan-card {
+  width: 430px;
+  padding: 30px;
+  border-radius: 22px;
+  text-align: center;
+  
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255,255,255,0.35);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  box-shadow: 
+    0 20px 40px rgba(0,0,0,0.5),
+    inset 0 1px 0 rgba(255,255,255,0.4);
+  animation: floatGlow 4s ease-in-out infinite;
+}
+
+@keyframes floatGlow {
+  0%, 100% { 
+    transform: translateY(0px) scale(1);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.4);
+  }
+  50% { 
+    transform: translateY(-12px) scale(1.02);
+    box-shadow: 0 30px 60px rgba(76,175,80,0.3), inset 0 1px 0 rgba(255,255,255,0.5);
+  }
+}
+
+@keyframes fadeUp {
+  0% { opacity: 0; transform: translateY(30px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* Title */
+.loan-card h2 {
+  font-size: 26px;
+  font-weight: 800;
+  color: #FFB300;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 25px;
+  animation: titleGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes titleGlow {
+  0% { text-shadow: 0 0 10px rgba(255,179,0,0.5); }
+  100% { text-shadow: 0 0 20px rgba(255,179,0,0.8), 0 0 30px rgba(255,179,0,0.4); }
+}
+
+/* Inputs */
+.loan-card input {
+  width: 100%;
+  padding: 14px;
+  margin: 12px 0 18px;
+  border-radius: 12px;
+  border: none;
+  font-size: 15px;
+  background: rgba(255,255,255,0.92);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.loan-card input:focus {
+  outline: none;
+  background: rgba(255,255,255,0.98);
+  border: 2px solid #4CAF50;
+  box-shadow: 0 0 20px rgba(76,175,80,0.4);
+  transform: scale(1.02);
+}
+
+/* Buttons */
+button {
+  width: 100%;
+  padding: 14px;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 16px;
+  font-weight: bold;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Calculate EMI */
+.btn-primary {
+  background: linear-gradient(45deg, #4CAF50, #66BB6A);
+  color: #fff;
+  box-shadow: 0 6px 20px rgba(76,175,80,0.4);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(45deg, #66BB6A, #81C784);
+  box-shadow: 0 8px 25px rgba(76,175,80,0.6);
+  transform: scale(1.08) translateY(-2px);
+}
+
+.btn-primary:active {
+  transform: scale(1.02);
+}
+
+/* Graph Button */
+.btn-show-graph {
+  display: none;
+  margin-top: 12px;
+  background: linear-gradient(45deg, #FFB300, #FFCA35);
+  color: #222;
+  box-shadow: 0 6px 20px rgba(255,179,0,0.4);
+}
+
+.btn-show-graph:hover {
+  background: linear-gradient(45deg, #FFCA35, #FFE082);
+  box-shadow: 0 8px 25px rgba(255,179,0,0.6);
+  transform: scale(1.08) translateY(-2px);
+}
+
+/* Result Box */
+.result-box {
+  display: none;
+  margin-top: 18px;
+  padding: 18px;
+  border-radius: 14px;
+  background: rgba(76,175,80,0.25);
+  border-left: 6px solid #4CAF50;
+  color: #fff;
+  animation: fadeInRes 0.6s ease-in, glowPulse 2s infinite alternate 0.6s;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 25px rgba(76,175,80,0.3);
+}
+
+@keyframes fadeInRes {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes glowPulse {
+  0% { 
+    box-shadow: 0 8px 25px rgba(76,175,80,0.3), 
+                inset 0 1px 0 rgba(255,255,255,0.3); 
+  }
+  100% { 
+    box-shadow: 0 12px 35px rgba(76,175,80,0.5), 
+                inset 0 1px 0 rgba(255,255,255,0.4); 
+  }
+}
+
+/* Canvas charts */
+canvas {
+  margin-top: 18px;
+  display: none;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+/* Back to Dashboard */
+.back-btn {
+  margin-top: 25px;
+  background: #ffb300;;
+  color: #fff;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.3);
+}
+
+.back-btn:hover {
+  background: rgba(255,255,255,0.45);
+  transform: scale(1.04) translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="loan-page">
+  <div class="loan-card">
+    <h2>Loan Calculator</h2>
+
+    <input type="number" id="loanAmount" placeholder="Loan Amount (₹)">
+    <input type="number" id="interestRate" placeholder="Interest Rate (%)">
+    <input type="number" id="loanYears" placeholder="Loan Duration (Years)">
+
+    <button class="btn-primary" onclick="calculateLoan()">Calculate EMI</button>
+
+    <div id="loanResult" class="result-box"></div>
+
+    <button class="btn-show-graph" id="graphButton" onclick="showGraphs()">📊 Show Graph</button>
+
+    <!-- Charts -->
+    <canvas id="emiChart"></canvas>
+    <canvas id="emiBarChart"></canvas>
+
+    <button class="back-btn" onclick="goBackToDashboard()">⬅ Back to Dashboard</button>
+  </div>
+</div>
+
+<script>
+function goBackToDashboard() {
+  window.location.href = "index.html";
+}
+
+let chartInstance = null;
+let barChartInstance = null;
+let emiData = {};
+
+function calculateLoan() {
+  const amount = +document.getElementById("loanAmount").value;
+  const rate = +document.getElementById("interestRate").value;
+  const years = +document.getElementById("loanYears").value;
+
+  if (!amount || !rate || !years) {
+    alert("Please fill all fields!");
+    return;
+  }
+
+  const monthlyRate = rate / 12 / 100;
+  const months = years * 12;
+  const emi = (amount * monthlyRate * Math.pow(1 + monthlyRate, months)) /
+              (Math.pow(1 + monthlyRate, months) - 1);
+
+  const totalPayment = emi * months;
+  const totalInterest = totalPayment - amount;
+
+  emiData = { amount, totalInterest, emi, years };
+
+  document.getElementById("loanResult").style.display = "block";
+  document.getElementById("loanResult").innerHTML = `
+    <h3>Loan Summary</h3>
+    <p><strong>Monthly EMI:</strong> ₹${emi.toFixed(2)}</p>
+    <p><strong>Total Interest:</strong> ₹${totalInterest.toFixed(2)}</p>
+    <p><strong>Total Payment:</strong> ₹${totalPayment.toFixed(2)}</p>
+  `;
+
+  document.getElementById("graphButton").style.display = "block";
+}
+
+function showGraphs() {
+  const { amount, totalInterest, emi, years } = emiData;
+  const emiCanvas = document.getElementById("emiChart");
+  const emiBarCanvas = document.getElementById("emiBarChart");
+
+  emiCanvas.style.display = "block";
+  emiBarCanvas.style.display = "block";
+
+  if (chartInstance) chartInstance.destroy();
+  if (barChartInstance) barChartInstance.destroy();
+
+  chartInstance = new Chart(emiCanvas, {
+    type: 'pie',
+    data: {
+      labels: ['Principal Amount', 'Total Interest'],
+      datasets: [{
+        data: [amount, totalInterest],
+        backgroundColor: ['#2563eb', '#ff9800'],
+      }]
+    }
+  });
+
+  const yearlyLabels = Array.from({ length: years }, (_, i) => `Year ${i+1}`);
+  const yearlyData = yearlyLabels.map(() => (emi * 12).toFixed(2));
+
+  barChartInstance = new Chart(emiBarCanvas, {
+    type: 'bar',
+    data: {
+      labels: yearlyLabels,
+      datasets: [{
+        label: "Yearly EMI Paid (₹)",
+        data: yearlyData,
+        backgroundColor: 'rgba(37, 99, 235, 0.8)',
+      }]
+    },
+    options: { scales: { y: { beginAtZero: true } } }
+  });
+}
+</script>
+
+</body>
+</html>

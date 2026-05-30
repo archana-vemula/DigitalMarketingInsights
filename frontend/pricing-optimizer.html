@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Product Pricing Optimizer</title>
+  <style>
+    body { font-family: Arial; padding: 20px; background: #f6f6f6; }
+    .box { background:white; padding:20px; border-radius:10px; margin-bottom:18px; }
+    button { padding:8px 14px; border-radius:6px; background:#008C7A; color:white; border:none; cursor:pointer; }
+  </style>
+</head>
+<body>
+
+<h2>📊 Product Pricing Optimizer</h2>
+
+<div class="box">
+  <h3>1️⃣ Demand Based Pricing</h3>
+  <input id="cropNameOptimizer" placeholder="Crop Name"><br><br>
+  <input id="marketPrice" placeholder="Market Price ₹" type="number"><br><br>
+  <select id="demandLevel">
+    <option value="">Select Demand</option>
+    <option value="high">High</option>
+    <option value="medium">Medium</option>
+    <option value="low">Low</option>
+  </select><br><br>
+  <button onclick="analyzePricing()">Analyze</button>
+  <div id="pricingAnalysis" style="margin-top:15px;"></div>
+</div>
+
+<div class="box">
+  <h3>2️⃣ Optimal Price Calculator</h3>
+  <input id="productionCost" placeholder="Production Cost ₹" type="number"><br><br>
+  <input id="profitMargin" placeholder="Profit Margin %" type="number"><br><br>
+  <input id="quantityOptimizer" placeholder="Quantity" type="number"><br><br>
+  <button onclick="calculateOptimalPrice()">Calculate</button>
+  <div id="optimalPriceResult" style="margin-top:15px;"></div>
+</div>
+
+<div class="box">
+  <h3>3️⃣ Competitor Strategy</h3>
+  <input id="yourCost" placeholder="Your Cost ₹" type="number"><br><br>
+  <input id="competitorPrice" placeholder="Competitor Price ₹" type="number"><br><br>
+  <select id="qualityLevel">
+    <option value="">Select Quality</option>
+    <option value="premium">Premium</option>
+    <option value="standard">Standard</option>
+  </select><br><br>
+  <button onclick="competitivePricingStrategy()">Suggest Strategy</button>
+  <div id="competitiveResult" style="margin-top:15px;"></div>
+</div>
+
+<button onclick="window.close()">Close Window</button>
+
+<script>
+  /* paste SAME 3 FUNCTIONS here */
+</script>
+
+</body>
+</html>
