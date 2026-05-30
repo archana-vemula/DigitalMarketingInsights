@@ -1,0 +1,648 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Digital Market Insights — Farmers</title>
+
+  <!-- Chart.js for prediction charts -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- i18next for translations -->
+  <script src="https://unpkg.com/i18next@22.4.9/dist/umd/i18next.min.js"></script>
+
+  <!-- PWA manifest -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#2c7a7b" />
+
+  <!-- Icons -->
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png" />
+  <link rel="apple-touch-icon" href="assets/icons/icon-192.png" />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+  <div class="brand">
+     <!new code>
+  <!-- NEW: three-line menu left of logo -->
+    <button id="sidebar-toggle" class="hamburger-btn" aria-label="Menu">
+      &#9776;
+    </button>
+    <img src="./images/logo.jpeg" class="logo" alt="Logo"/>
+
+    Digital Market Insights
+    
+    </div>
+  <nav id="sidebar" class="sidebar collapsed">
+    <ul class="sidebar-list">
+      <li class="sidebar-item" onclick="openSeasonalCalendar()">
+  <span class="sidebar-icon">📅</span>
+  <span class="sidebar-text">Seasonal Calendar</span>
+</li>
+     <li class="sidebar-item" onclick="openGovSchemes()"> 
+      <span class="sidebar-icon">🏛️</span>
+      <span class="sidebar-text">Government Schemes</span>
+     </li>
+
+      <li class="sidebar-item" onclick="openLoanCalculator()">
+  <span class="sidebar-icon">💰</span>
+  <span class="sidebar-text">Loan Calculator</span>
+</li>
+
+      <li class="sidebar-item" onclick="openProfitPredictor()">
+  <span class="sidebar-icon">📈</span>
+  <span class="sidebar-text">Profit Predictor</span>
+</li>
+<li class="sidebar-item" onclick="openCropRotation()">
+  <span class="sidebar-icon">🌱</span>
+  <span class="sidebar-text">Crop Rotation</span>
+</li>
+<li class="sidebar-item" onclick="openWeather()">
+  <span class="sidebar-icon">☀️</span>
+  <span class="sidebar-text">Weather</span>
+</li>
+
+<li class="sidebar-item" onclick="openRiskAlerts()">
+  <span class="sidebar-icon">⚠️</span>
+  <span class="sidebar-text">Risk Alerts</span>
+</li>
+
+<li class="sidebar-item" onclick="openBestDayToSell()">
+  <span class="sidebar-icon">🎯</span>
+  <span class="sidebar-text">Best Day to Sell</span>
+</li>
+
+</ul>
+  </nav>
+
+  <!-- existing -->
+
+  <div class="top-actions" id="top-actions">
+  <select id="lang-select" class="lang-dropdown">
+    <option value="en">English</option>
+    <option value="hi">हिन्दी</option>
+    <option value="te">తెలుగు</option>
+  </select>
+  
+
+  <button class="btn small login-btn" onclick="openLogin()">Login</button>
+  <button class="btn primary small signup-btn" onclick="openSignup()">Signup</button>
+
+  <div id="profile-box" class="profile-box" style="display:none;">
+    <div id="profile-icon" class="profile-icon" onclick="toggleProfileMenu()"></div>
+
+    <div id="profile-menu" class="profile-menu">
+      <button onclick="openChangePassword()" class="menu-btn">🔒 Change Password</button>
+      <button onclick="logout()" class="menu-btn logout-btn">🚪 Logout</button>
+    </div>
+  </div>
+</div>
+
+
+
+</header>
+<!new codeclose>
+<!new code open>
+<main class="container">
+    <section class="hero">
+      <div class="hero-images">
+      <img class="carousel-img active" src="./images/farmer.jpeg" alt="Farmer 1" />
+  <img class="carousel-img" src="./images/farmer1.webp" alt="Farmer 2" />
+  <img class="carousel-img" src="./images/farmer2.jpeg" alt="Farmer 3" />
+  <img class="carousel-img" src="./images/farmer3.jpg" alt="Farmer 4" />
+  </div>
+  <!new close>
+
+      <div class="hero-text">
+        <h1 data-i18n="heroTitle">Know your mandi price • Make the right sale decision</h1>
+        <p data-i18n="heroSub">Real-time prices • 7-day prediction • Offline support</p>
+      </div>
+    </section>
+
+    <section class="controls">
+      <div class="form-row">
+        <input id="crop-input" placeholder="Crop (e.g., Cotton)" />
+        <input id="state-input" placeholder="State (e.g., Telangana)" />
+        <button id="fetch-btn" class="btn" onclick="fetchLivePrices()">
+          <span data-i18n="fetchPrices">Fetch Prices</span>
+        </button>
+        <button id="predict-btn" class="btn outline" onclick="predictPrices()">
+          <span data-i18n="predict">Predict</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Login/Signup Success Message -->
+    <div id="login-message" class="login-message" style="display:none;"></div>
+
+    <section class="dashboard">
+      <section id="weather-dashboard" style="display:none;">
+  <div class="card">
+    <h3>Weather Dashboard</h3>
+    <p>Coming soon: live forecast, rain alerts, temp predictions 🌦️</p>
+    <button onclick="closeWeather()" class="btn">Back</button>
+
+  </div>
+</section>
+
+      <div class="user-profile-card" id="user-profile-card" style="display:none;">
+        <div class="user-profile-header">
+          <div class="user-avatar" id="user-avatar"></div>
+          <div class="user-info">
+            <div class="user-name" id="user-name"></div>
+            <div class="user-status">Logged In</div>
+          </div>
+          <button class="close-profile-btn" onclick="closeUserProfile()">&times;</button>
+        </div>
+        <div class="user-profile-footer">
+          <button class="btn-small" onclick="openChangePassword()">Change Password</button>
+          <button class="btn-small logout-btn" onclick="logout()">Logout</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 data-i18n="livePrices">Live Prices</h3>
+        <small id="source-badge"></small>
+        <table id="prices-table">
+          <thead>
+            <tr>
+              <th data-i18n="market">Market</th>
+              <th data-i18n="district">District</th>
+              <th data-i18n="modalPrice">Modal Price (₹)</th>
+              <th data-i18n="date">Date</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <h3 data-i18n="prediction">Prediction (Next 7 Days)</h3>
+        <div class="guidance" id="guidance-text"></div>
+        <table id="prediction-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Predicted Modal Price (₹)</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <canvas id="prediction-chart" height="150"></canvas>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <small data-i18n="offlineText">Offline-ready: last fetched results cached locally</small>
+    </footer>
+  </main>
+
+
+<!-- ✨ LOGIN MODAL -->
+<div id="login-modal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeLogin()">&times;</span>
+    <h3>Welcome Back 👋</h3>
+    <input id="login-user" placeholder="Username or Email" />
+    <input id="login-pass" type="password" placeholder="Password" />
+    <button class="btn primary" onclick="login()">Login</button>
+
+    <div class="modal-links">
+     <a href="javascript:void(0)" onclick="openForgotPassword(); closeLogin();">Forgot Password?</a>
+
+      <p>Don't have an account? <a href="#" onclick="openSignup(); closeLogin();">Sign up</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- ✨ SIGNUP MODAL -->
+<div id="signup-modal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeSignup()">&times;</span>
+    <h3>Create Account ✨</h3>
+    <input id="signup-user" placeholder="Username" />
+    <input id="signup-email" type="email" placeholder="Email" />
+    <input id="signup-mobile" type="tel" placeholder="Mobile Number" />
+    <input id="signup-pass" type="password" placeholder="Password" />
+    <button class="btn primary" onclick="signup()">Sign up</button>
+
+    <div class="modal-links">
+      <p>Already have an account? <a href="#" onclick="openLogin(); closeSignup();">Login</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- ✨ FORGOT PASSWORD -->
+<div id="forgot-password-modal" class="modal" style="display:none;">
+  <div class="modal-content">
+    <span class="close-btn" onclick="closeForgotPassword()">&times;</span>
+    
+    <h2>Reset Password</h2>
+    <input type="email" id="reset-email" placeholder="Enter your email" />
+    <button onclick="sendResetLink()">Send Reset Link</button>
+  </div>
+</div>
+
+
+  <!-- Translation Script -->
+  <script>
+//new code
+function openWeatherDashboard() {
+  document.querySelector(".dashboard").style.display = "none";  // hide main dashboard
+  document.getElementById("weather-dashboard").style.display = "block"; // show weather
+  document.getElementById("sidebar").classList.add("collapsed"); // optional close menu
+}
+function closeWeather() {
+  document.querySelector(".dashboard").style.display = "block";
+  document.getElementById("weather-dashboard").style.display = "none";
+}
+
+function openWeather() {
+  window.location.href = "weather.html";  // opens new weather page
+}
+
+function openSeasonalCalendar() {
+  window.location.href = "seasonal-calendar.html"; 
+}
+function openGovSchemes() {
+  window.location.href = "gov-schemes.html"; 
+}
+function openLoanCalculator() {
+  window.location.href = "loan-calculator.html";
+}
+function openProfitPredictor() {
+  window.location.href = "profit.html";
+}
+function openCropRotation() {
+  window.location.href = "crop-rotation.html";
+}
+
+function openRiskAlerts() {
+  window.location.href = "risk-alerts.html";
+}
+
+function openBestDayToSell() {
+  window.location.href = "best-day-to-sell.html";
+}
+
+//===== Crop Rotation Logic =====
+const rotationData = {
+  loamy: {
+    wheat: { next: "Soybean", color: "green", tip: "Plant soybean next to add nutrients to the soil." },
+    maize: { next: "Groundnut", color: "green", tip: "Groundnut will keep the soil healthy and prevent pests." },
+    soybean: { next: "Wheat", color: "green", tip: "Wheat grows well after soybean; soil stays fertile." },
+    groundnut: { next: "Maize", color: "green", tip: "Maize grows better after groundnut; soil is balanced." },
+    rice: { next: "Pulses", color: "green", tip: "Plant pulses next to improve soil and get better yield." },
+    cotton: { next: "Barley", color: "green", tip: "Barley keeps the soil healthy for the next crop." },
+    millet: { next: "Soybean", color: "green", tip: "Soybean will help restore nutrients for future crops." },
+    sorghum: { next: "Groundnut", color: "green", tip: "Groundnut will keep soil fertile and reduce pests." },
+    pulses: { next: "Maize", color: "green", tip: "Maize grows well after pulses; soil stays rich." },
+    barley: { next: "Cotton", color: "green", tip: "Cotton grows better after barley and reduces pests." }
+  },
+  clay: {
+    wheat: { next: "Maize", color: "green", tip: "Plant maize next; clay soil holds water well for maize." },
+    maize: { next: "Rice", color: "green", tip: "Rice needs moist soil; clay is perfect after maize." },
+    soybean: { next: "Wheat", color: "green", tip: "Wheat grows well after soybean; soil is ready." },
+    groundnut: { next: "Rice", color: "green", tip: "Rice grows better after groundnut; soil stays healthy." },
+    rice: { next: "Groundnut", color: "green", tip: "Groundnut restores nutrients to the soil." },
+    cotton: { next: "Millet", color: "green", tip: "Millet will help balance soil for next crops." },
+    millet: { next: "Soybean", color: "green", tip: "Soybean adds nutrients; soil stays healthy." },
+    sorghum: { next: "Rice", color: "green", tip: "Rice grows better after sorghum." },
+    pulses: { next: "Wheat", color: "green", tip: "Wheat grows well and soil remains fertile." },
+    barley: { next: "Maize", color: "green", tip: "Maize will grow well and prevent pests." }
+  },
+  sandy: {
+    wheat: { next: "Groundnut", color: "green", tip: "Groundnut helps sandy soil stay fertile." },
+    maize: { next: "Soybean", color: "green", tip: "Soybean will add nutrients to the soil." },
+    soybean: { next: "Maize", color: "green", tip: "Maize grows well after soybean; soil stays healthy." },
+    groundnut: { next: "Wheat", color: "green", tip: "Wheat grows well after groundnut." },
+    rice: { next: "Wheat", color: "green", tip: "Wheat grows better and keeps soil balanced." },
+    cotton: { next: "Millet", color: "green", tip: "Millet keeps the soil healthy for next crops." },
+    millet: { next: "Soybean", color: "green", tip: "Soybean adds nutrients and protects soil." },
+    sorghum: { next: "Groundnut", color: "green", tip: "Groundnut restores nutrients to sandy soil." },
+    pulses: { next: "Maize", color: "green", tip: "Maize grows well and soil remains fertile." },
+    barley: { next: "Cotton", color: "green", tip: "Cotton grows well and reduces pests." }
+  },
+  black: {
+    wheat: { next: "Cotton", color: "green", tip: "Cotton grows very well in black soil." },
+    maize: { next: "Soybean", color: "green", tip: "Soybean adds nutrients to rich black soil." },
+    rice: { next: "Pulses", color: "green", tip: "Pulses will improve soil for next crop." }
+  },
+  red: {
+    wheat: { next: "Millet", color: "green", tip: "Millet will keep the red soil fertile." },
+    maize: { next: "Pulses", color: "green", tip: "Pulses restore nutrients for next crops." },
+    cotton: { next: "Wheat", color: "green", tip: "Wheat grows well after cotton in red soil." }
+  },
+  alluvial: {
+    rice: { next: "Pulses", color: "green", tip: "Pulses improve soil fertility after rice." },
+    wheat: { next: "Maize", color: "green", tip: "Maize grows well after wheat." },
+    maize: { next: "Soybean", color: "green", tip: "Soybean adds nutrients to soil after maize." }
+  },
+  laterite: {
+    wheat: { next: "Groundnut", color: "green", tip: "Groundnut will keep laterite soil fertile." },
+    maize: { next: "Millet", color: "green", tip: "Millet grows well and improves soil." },
+    rice: { next: "Soybean", color: "green", tip: "Soybean restores nutrients to laterite soil." }
+  }
+};
+
+//===== Show Recommendation =====
+document.getElementById("recommendBtn").addEventListener("click", () => {
+  const soil = document.getElementById("soilSelect").value;
+  const crop = document.getElementById("cropSelect").value;
+  const display = document.getElementById("recommendation");
+
+  if (!soil || !crop) {
+    display.innerHTML = "<span style='color:red;'>Please select both soil type and previous crop.</span>";
+    return;
+  }
+
+  if (rotationData[soil] && rotationData[soil][crop]) {
+    const rec = rotationData[soil][crop];
+    display.innerHTML = `
+      <h4 style="margin:0; color:${rec.color};">${rec.next}</h4>
+      <p style="margin:0; font-size:14px;">Tip: ${rec.tip}</p>
+    `;
+  } else {
+    display.innerHTML = "<span style='color:orange;'>No recommendation available for this combination.</span>";
+  }
+});
+  </script>
+
+  <!-- App logic -->
+  <script src="app.js"></script>
+  
+  <!-- Language Translation System -->
+  <script>
+    const translations = {
+      en: {
+        title: "Digital Market Insights",
+        heroTitle: "Know your mandi price • Make the right sale decision",
+        heroSub: "Real-time prices • 7-day prediction • Offline support",
+        fetchPrices: "Fetch Prices",
+        predict: "Predict",
+        livePrices: "Live Prices",
+        market: "Market",
+        district: "District",
+        modalPrice: "Modal Price (₹)",
+        date: "Date",
+        prediction: "Prediction (Next 7 Days)",
+        offlineText: "Offline-ready: last fetched results cached locally",
+        cropPlaceholder: "Crop (e.g., Cotton)",
+        statePlaceholder: "State (e.g., Telangana)",
+      },
+      hi: {
+        title: "डिजिटल मार्केट इनसाइट्स",
+        heroTitle: "अपने मंडी मूल्य जानें • सही फैसला लें",
+        heroSub: "रीयल-टाइम मूल्य • 7 दिन का पूर्वानुमान • ऑफ़लाइन सपोर्ट",
+        fetchPrices: "मूल्य प्राप्त करें",
+        predict: "पूर्वानुमान करें",
+        livePrices: "ताज़ा मंडी भाव",
+        market: "बाज़ार",
+        district: "ज़िला",
+        modalPrice: "मॉडल मूल्य (₹)",
+        date: "तारीख़",
+        prediction: "पूर्वानुमान (अगले 7 दिन)",
+        offlineText: "ऑफ़लाइन सपोर्ट: आख़िरी डेटा सुरक्षित है",
+        cropPlaceholder: "फसल (जैसे कपास)",
+        statePlaceholder: "राज्य (जैसे तेलंगाना)",
+      },
+      te: {
+        title: "డిజిటల్ మార్కెట్ ఇన్సైట్స్",
+        heroTitle: "మార్కెట్ ధరలను తెలుసుకోండి • సరైన నిర్ణయం తీసుకోండి",
+        heroSub: "రియల్ టైమ్ ధరలు • 7 రోజుల అంచనా • ఆఫ్లైన్ సపోర్ట్",
+        fetchPrices: "ధరలు పొందండి",
+        predict: "అంచనా వేయండి",
+        livePrices: "తాజా మార్కెట్ ధరలు",
+        market: "మార్కెట్",
+        district: "జిల్లా",
+        modalPrice: "మోడల్ ధర (₹)",
+        date: "తేదీ",
+        prediction: "అంచనా (తదుపరి 7 రోజులు)",
+        offlineText: "ఆఫ్లైన్ సపోర్ట్: చివరి డేటా సేవ్ చేయబడింది",
+        cropPlaceholder: "పంట (ఉదా: చెప్పు)",
+        statePlaceholder: "రాష్ట్రం (ఉదా: తెలంగాణ)",
+      },
+    };
+
+    function updateLanguage(language) {
+      // Save language preference
+      localStorage.setItem('selectedLanguage', language);
+      console.log('Updating language to:', language);
+      
+      // Update all elements with data-i18n attribute
+      document.querySelectorAll("[data-i18n]").forEach(el => {
+        const key = el.getAttribute("data-i18n");
+        if (translations[language] && translations[language][key]) {
+          el.textContent = translations[language][key];
+          console.log('Updated', key, 'to', translations[language][key]);
+        }
+      });
+      
+      // Update placeholders
+      const cropInput = document.getElementById('crop-input');
+      const stateInput = document.getElementById('state-input');
+      
+      if (cropInput) {
+        cropInput.placeholder = translations[language].cropPlaceholder;
+      }
+      if (stateInput) {
+        stateInput.placeholder = translations[language].statePlaceholder;
+      }
+    }
+
+    // Setup language selector change event
+    function setupLanguageSelector() {
+      const langSelect = document.getElementById("lang-select");
+      if (langSelect) {
+        langSelect.addEventListener("change", (e) => {
+          console.log('Language changed to:', e.target.value);
+          updateLanguage(e.target.value);
+        });
+        
+        // Set initial language
+        const savedLanguage = localStorage.getItem('selectedLanguage') || 'en';
+        langSelect.value = savedLanguage;
+        updateLanguage(savedLanguage);
+      } else {
+        console.warn('lang-select element not found');
+      }
+    }
+
+    // Initialize when DOM is ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', setupLanguageSelector);
+    } else {
+      setupLanguageSelector();
+    }
+  </script>
+
+<!-- Floating Chatbot Icon -->
+<!-- ====== Farmer Chatbot ====== -->
+<!-- Chatbot Icon -->
+<div id="chatbotIcon" style="
+    position:fixed;
+    bottom:20px;
+    right:20px;
+    width:60px;
+    height:60px;
+    background:#0a74da;
+    color:white;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:28px;
+    cursor:pointer;
+    box-shadow:0 4px 10px rgba(0,0,0,0.3);
+    z-index:9999;
+">💬</div>
+
+<!-- Chatbot Window -->
+<div id="chatContainer" style="
+    display:none;
+    position:fixed;
+    bottom:20px;
+    right:20px;
+    width:380px;
+    height:520px;
+    background:white;
+    border-radius:14px;
+    box-shadow:0 0 15px rgba(0,0,0,0.4);
+    flex-direction:column;
+    overflow:hidden;
+    font-family:sans-serif;
+    z-index:9999;
+">
+
+  <!-- Header -->
+  <div style="
+      background:#0a74da;
+      color:white;
+      padding:12px;
+      font-size:18px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      border-radius:14px 14px 0 0;
+  ">
+    Farmer Chatbot
+    <span id="closeBtn" style="cursor:pointer;font-size:20px;">✖</span>
+  </div>
+
+  <!-- Language Selector -->
+  <select id="languageSelect" style="
+      margin:8px;
+      padding:5px;
+      border-radius:6px;
+      width:95%;
+      border:1px solid #aaa;
+  ">
+    <option value="en">English</option>
+    <option value="hi">Hindi</option>
+    <option value="te">Telugu</option>
+  </select>
+
+  <!-- Messages -->
+  <div id="messages" style="
+      flex:1;
+      padding:10px;
+      overflow-y:auto;
+      background:#f9f9f9;
+  "></div>
+
+  <!-- Input Area -->
+  <div style="display:flex;align-items:center;padding:8px;">
+    <input id="textInput" placeholder="Type message..." 
+      style="flex:1;padding:8px;border-radius:6px;border:1px solid #aaa;">
+    <span id="sendBtn" style="font-size:22px;margin-left:5px;cursor:pointer;">➤</span>
+  </div>
+
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const chatbotIcon = document.getElementById("chatbotIcon");
+  const chatContainer = document.getElementById("chatContainer");
+  const closeBtn = document.getElementById("closeBtn");
+
+  if (!chatbotIcon || !chatContainer || !closeBtn) {
+    console.error("Chatbot elements not found!");
+    return;
+  }
+
+  // Open chatbot
+  chatbotIcon.addEventListener("click", () => {
+    chatContainer.style.display = "flex";  // show chat container
+    chatbotIcon.style.display = "none";    // hide icon
+  });
+
+  // Close chatbot
+  closeBtn.addEventListener("click", () => {
+    chatContainer.style.display = "none";  // hide chat container
+    chatbotIcon.style.display = "flex";    // show icon again
+  });
+});
+</script>
+
+<!-- Carousel Auto-Rotate Script -->
+<script>
+(function() {
+  let currentSlide = 0;
+  let slides = null;
+  let rotationInterval = null;
+
+  function initCarousel() {
+    slides = document.querySelectorAll('.hero-images .carousel-img');
+    
+    if (!slides || slides.length < 2) {
+      console.log('❌ Carousel init failed: Found ' + (slides ? slides.length : 0) + ' slides');
+      return false;
+    }
+
+    console.log('✅ Carousel: Initializing with ' + slides.length + ' images');
+    
+    // Clear old interval if exists
+    if (rotationInterval) clearInterval(rotationInterval);
+    
+    // Set all to inactive first
+    slides.forEach(slide => slide.classList.remove('active'));
+    
+    // Activate first slide
+    slides[0].classList.add('active');
+    currentSlide = 0;
+    console.log('✅ Carousel: Showing slide 1/' + slides.length);
+    
+    // Start rotation every 4 seconds
+    rotationInterval = setInterval(function() {
+      slides.forEach(slide => slide.classList.remove('active'));
+      currentSlide = (currentSlide + 1) % slides.length;
+      slides[currentSlide].classList.add('active');
+      console.log('✅ Carousel: Showing slide ' + (currentSlide + 1) + '/' + slides.length);
+    }, 4000);
+    
+    return true;
+  }
+
+  // Try to initialize on multiple events
+  function tryInit() {
+    if (!initCarousel()) {
+      setTimeout(tryInit, 500);
+    }
+  }
+
+  // Start trying immediately
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', tryInit);
+  } else {
+    tryInit();
+  }
+  
+  // Also try after a delay
+  setTimeout(tryInit, 1000);
+})();
+</script>
+
+</body>
+
+
+</html>
